@@ -1,29 +1,46 @@
 import {  useState } from "react";
+import {useNavigate } from "react-router-dom";
 interface UserDetail{
   username: string,
   password: string, 
 }
-function Login(){
+export default function Login(){
   event?.preventDefault
-
+  const [found, setfound] = useState(false);
   const [userD, setuserD] = useState<UserDetail>({
     username: '',
     password: '',
   });
+  const nav =useNavigate()
   // Update the document title using the browser API
   const verifylog=()=>{
+    
     event?.preventDefault();
-    fetch('http://localhost/ClearanceSys/backend/login.php',{
-      method:"POST",
-      body: JSON.stringify(userD)
-    })
+    try{
+      fetch('http://localhost/ClearanceSys/backend/login.php',{
+        method:"POST",
+        body: JSON.stringify(userD)
+      }).then(async (data:Response)=>{
+        const res:any = await data.json();
+        if (res.length != 0){
+          
+          setfound(false);
+          sessionStorage.setItem('sessionkey',JSON.stringify(res))
+          nav("/dashboard");
+          
+        }else{
+          setfound(true);
+        }
+       
+      })
+    }catch(err){
+      console.log(err)
+    }
+  
   }
 
-
-
-
     return (
-<body className="text-center">
+<div className="text-center">
     
     <main className="form-signin">
       <form>
@@ -45,6 +62,10 @@ function Login(){
           </label>
         </div>
         <button className="w-100 btn btn-lg btn-primary" type="submit" onClick={verifylog}>Sign in</button>
+        
+        {found==true?<div className="alert alert-danger" role="alert">
+          No user found
+        </div>:''}
         <p className="mt-5 mb-3 text-muted">© 2017–2021</p>
       </form>
     </main>
@@ -53,6 +74,7 @@ function Login(){
         
       
     
-    </body>)
+    </div>
+    )
     }
-    export default Login
+ 

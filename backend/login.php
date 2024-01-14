@@ -1,14 +1,13 @@
 <?php
+include 'database.php';
 header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Origin, Content-Type, Accept");
+header("Access-Control-Allow-Methods: POST, GET");
 
-$rawPostData = file_get_contents("php://input");
 
-// // Decode the JSON data if needed
-// $postData = json_decode($rawPostData);
+$rawPostData = json_decode(file_get_contents("php://input"),true);
 
- 
- // Echo the JSON data
- echo $rawPostData;
+ $conn =query("select * from student where username ='".$rawPostData['username']."' and password ='".$rawPostData['password']."'");
+ print json_encode($conn);
+
+ return dbclose();
 ?>
