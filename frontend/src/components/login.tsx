@@ -40,9 +40,9 @@ export default function Login(){
   }
 
     return (
-<div className="text-center">
+<div className="form-signin container">
     
-    <main className="form-signin">
+    
       <form>
         <img className="mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"/>
         <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
@@ -68,12 +68,7 @@ export default function Login(){
         </div>:''}
         <p className="mt-5 mb-3 text-muted">© 2017–2021</p>
       </form>
-    </main>
-    
-    
-        
-      
-    
+
     </div>
     )
     }

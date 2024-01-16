@@ -3,6 +3,7 @@ import RightDesign from "../components/Rightdesign"
 import Body from "../components/body"
 import "../components/css/dashboard.css"
 import { useSearchParams } from "react-router-dom"
+import Paginate from "../components/pagination"
 interface defaultTypes{
   username:string,
   firstname:string,
@@ -22,14 +23,17 @@ function allStudent(search){
 export default function Student(){
     const [alluser, setalluser] = useState<[defaultTypes]>([defaultVal]);
     const [userinfo,setuserinfo] = useState<defaultTypes>(defaultVal);
-  
+    const [pagetotal,setpagetotal] = useState(1)
     const [searchParams, setSearchParams] = useSearchParams();
     useEffect(()=>{
       allStudent(searchParams).then(async (data:any)=>{
             const res = await data.json()
             setalluser(res)
-          
-        })
+      });
+      fetch('http://localhost/ClearanceSys/backend/student/totalstudent.php?'+searchParams).then(async (data)=>{
+        const res = await data.json()
+        setpagetotal(res.total)
+      })
     },[searchParams])
 
     function add(){
@@ -180,7 +184,7 @@ export default function Student(){
     return (<>
         <Body>
             
-        <RightDesign pageroute={'Student'} tableview={tableview()} tablecreate={tablecreate()} tablesearch={tablesearch()}></RightDesign>
+        <RightDesign pageroute={'Student'} tableview={tableview()} tablecreate={tablecreate()} tablesearch={tablesearch()} tablerow={<Paginate total={pagetotal.toString()}/>}></RightDesign>
         </Body>
        
     </>)
